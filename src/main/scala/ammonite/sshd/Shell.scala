@@ -2,12 +2,10 @@ package ammonite.sshd
 
 import org.apache.sshd
 
-class Shell(runner: SshServer.TerminalTask) extends sshd.server.Command with Logging {
-  logger.debug("Instantiated")
-
-  var in: java.io.InputStream = null
-  var out: java.io.OutputStream = null
-  var err: java.io.OutputStream = null
+class Shell(runner: Ssh.TerminalTask) extends sshd.server.Command {
+  var in: java.io.InputStream = _
+  var out: java.io.OutputStream = _
+  var err: java.io.OutputStream = _
   var exit: Option[sshd.server.ExitCallback] = None
   var thread: Option[Thread] = None
 

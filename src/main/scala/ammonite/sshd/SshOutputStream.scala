@@ -2,25 +2,20 @@ package ammonite.sshd
 
 import java.io.OutputStream
 
-// fixes newline for ssh
 class SshOutputStream(out:OutputStream) extends OutputStream {
   override def close() { out.close() }
   override def flush() { out.flush() }
 
-  override def write(b: Int) {
+  override def write(b: Int) { // ssh only accepts new lines with \r
     if (b.toChar == '\n') out.write('\r')
     out.write(b)
   }
 
-  override def write(b: Array[Byte]) {
-    var i = 0
-    while (i < b.length) {
-      write(b(i))
-      i += 1
-    }
-  }
+  override def write(bytes: Array[Byte]):Unit = for {
+    i ← bytes.indices
+  } write(bytes(i))
 
-  override def write(b: Array[Byte], off: Int, len: Int) {
-    write(b.slice(off, off + len))
+  override def write(bytes: Array[Byte], off: Int, len: Int) {
+    write(bytes.slice(off, off + len))
   }
 }
