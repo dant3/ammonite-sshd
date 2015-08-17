@@ -1,6 +1,6 @@
-package ammonite.sshd
+package ammonite.sshd.util
 
-import java.io.{OutputStream, InputStream, PrintStream}
+import java.io.{InputStream, OutputStream, PrintStream}
 
 case class Environment(
   thread:Thread,

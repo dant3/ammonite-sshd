@@ -1,13 +1,11 @@
 package ammonite.sshd
 
 import ammonite.ops.Path
+import ammonite.repl.Repl
 
 case class SshServerConfig(
   port: Int,
-  users:List[SshUser],
-  hostKeyPath: Option[Path] = None
-) { override def toString = s"(port = $port, users = '$users', hostKeyPath = $hostKeyPath)" }
-
-case class SshUser(login:String, password:String) {
-  def toTuple:(String, String) = (login, password)
-}
+  users:List[Creds],
+  ammoniteHome:Path = Repl.defaultAmmoniteHome,
+  hostKeyFile:Option[Path] = None
+) { override def toString = s"(port = $port, users = '$users', hostKeyFile = $hostKeyFile)" }

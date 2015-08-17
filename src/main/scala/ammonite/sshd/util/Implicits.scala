@@ -1,4 +1,4 @@
-package ammonite.sshd
+package ammonite.sshd.util
 
 import org.apache.sshd.common.Factory
 import org.apache.sshd.server.Command
