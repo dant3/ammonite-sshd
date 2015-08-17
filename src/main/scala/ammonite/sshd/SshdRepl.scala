@@ -1,6 +1,6 @@
 package ammonite.sshd
 
-import java.io.{InputStream, OutputStream}
+import java.io.{PrintStream, InputStream, OutputStream}
 
 import ammonite.ops.Path
 import ammonite.repl.{Bind, Ref, Repl, Storage}
@@ -56,7 +56,14 @@ object SshdRepl {
   private def runRepl(homePath: Path, predef: String, replArgs: Seq[Bind[_]])(in:InputStream, out:OutputStream):Unit = {
     val replSessionEnv = new Environment(replServerClassLoader, in, out)
     Environment.withEnvironment(replSessionEnv) {
-      new Repl(in, out, Ref(Storage(homePath)), predef, replArgs).run()
+      try {
+        new Repl(in, out, Ref(Storage(homePath)), predef, replArgs).run()
+      } catch {
+        case any:Throwable ⇒
+          val sshClientOutput = new PrintStream(out)
+          sshClientOutput.println("What a terrible failure, the REPL just blow up!")
+          any.printStackTrace(sshClientOutput)
+      }
     }
   }
 }
